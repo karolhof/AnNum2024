@@ -4,9 +4,11 @@
 
 using namespace std; // Usar el espacio de nombres estándar
 
+const double EPSILON = 1.0e-4; // Tolerancia para el criterio de parada
+
 // Definir la función de la cual queremos encontrar la raíz
 double funcion(double x) {
-    return exp(-x) - x; // Ejemplo: f(x) = e^(-x) - x
+    return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
 }
 
 // Implementación del método de la secante con tabla de iteraciones
@@ -70,10 +72,9 @@ double metodoSecante(double x0, double x1, double tolerancia, int maxIter) {
 int main() {
     double x0 = 0.4; // Primer valor inicial
     double x1 = 0.8; // Segundo valor inicial
-    double tolerancia = 0.001; // Tolerancia para la convergencia
     int maxIter = 100; // Número máximo de iteraciones
     
-    double raiz = metodoSecante(x0, x1, tolerancia, maxIter);
+    double raiz = metodoSecante(x0, x1, EPSILON, maxIter);
     cout << "Aproximación de la raíz: " << raiz << endl;
     
     return 0;

@@ -6,6 +6,8 @@
 
 using namespace std;
 
+const double EPSILON = 1.0e-3;
+
 // Función que calcula la norma de la matriz (Norma 1)
 double calcularNormaMatriz(const vector<vector<double>>& matriz) {
     int n = matriz.size();
@@ -104,10 +106,8 @@ int main() {
     cout << "El exponente de la notación científica del producto es: " << exponente << endl;
 
     // Solicitar el valor de t
-    int t;
-    cout << "Introduce un valor entero t: ";
-    cin >> t;
-
+    int t=obtenerExponente(EPSILON)+1;
+    cout<<"El valor de t es: "<<t<<endl;
     // Calcular n = t - exponente
     int n = t - exponente;
     cout << "El valor de n es: " << n << endl;

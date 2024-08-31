@@ -1,77 +1,126 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <limits>
 #include <functional>
 
 using namespace std;
 
-// Función para evaluar la función en un punto dado
-double evaluarFuncion(const function<double(double)>& funcion, double x) {
-    return funcion(x);
+const double EPSILON = 0.001; // Tolerancia para el método de bisección
+
+// Función para encontrar los intervalos donde f(x) cambia de signo
+vector<pair<double, double>> findSignChangeIntervals(function<double(double)> f, double start, double end, double increment) {
+    vector<pair<double, double>> intervals;
+    double x1 = start;
+    double f1 = f(x1);
+
+    while (x1 < end) {
+        double x2 = x1 + increment;
+        if (x2 > end) x2 = end; // Asegurar que el último intervalo sea exactamente hasta 'end'
+        double f2 = f(x2);
+
+        if (f1 * f2 < 0) {
+            intervals.push_back({x1, x2});
+        }
+
+        // Actualizar para la siguiente iteración
+        x1 = x2;
+        f1 = f2;
+    }
+
+    return intervals;
 }
 
-// Método de Bisección
-double biseccion(const function<double(double)>& funcion, double a, double b, double tolerancia) {
-    double c;  // Punto medio del intervalo
+// Función para encontrar la raíz en un intervalo usando el método de bisección
+double bisection(const function<double(double)>& funcion, double a, double b, double tolerancia) {
+    double fa = funcion(a);
+    double fb = funcion(b);
 
-    // Mientras la mitad del intervalo sea mayor que la tolerancia, seguimos iterando
+    // Verificar si el intervalo inicial contiene un cambio de signo
+    if (fa * fb > 0) {
+        cerr << "Error: No hay cambio de signo en el intervalo dado [" << a << ", " << b << "]." << endl;
+        return numeric_limits<double>::quiet_NaN();
+    }
+
+    double c;
     while ((b - a) / 2.0 > tolerancia) {
         c = (a + b) / 2.0;  // Calcular el punto medio
+        double fc = funcion(c);
 
         // Si f(c) es exactamente 0, hemos encontrado la raíz
-        if (evaluarFuncion(funcion, c) == 0.0) {
-            break;
-        }
-        // Si f(a) y f(c) tienen signos opuestos, la raíz está en [a, c]
-        else if (evaluarFuncion(funcion, a) * evaluarFuncion(funcion, c) < 0) {
+        if (fc == 0.0 || fabs(b - a) < tolerancia) {
+            return c;
+        } else if (fa * fc < 0) {
             b = c;
-        }
-        // Si no, la raíz está en [c, b]
-        else {
+            fb = fc;
+        } else {
             a = c;
+            fa = fc;
         }
     }
 
-    return c;  // Retornar la aproximación de la raíz
+    return (a + b) / 2.0;
+}
+
+// Función principal para encontrar todas las raíces en un intervalo dado
+vector<double> findAllRoots(function<double(double)> f, double start, double end, double increment) {
+    vector<double> roots;
+
+    // Encontrar todos los intervalos donde hay un cambio de signo
+    vector<pair<double, double>> intervals = findSignChangeIntervals(f, start, end, increment);
+
+    // Aplicar el método de bisección en cada intervalo encontrado
+    for (const auto& interval : intervals) {
+        double root = bisection(f, interval.first, interval.second, EPSILON);
+        if (!isnan(root)) {
+            // Evitar duplicados con un pequeño margen
+            bool isDuplicate = false;
+            for (const auto& r : roots) {
+                if (fabs(r - root) < EPSILON) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate) {
+                roots.push_back(root);
+            }
+        }
+    }
+
+    return roots;
 }
 
 int main() {
-    double longitudIntervalo, tolerancia;
-    double dominioInicio = 0.001, dominioFin = 1000.0;  // Definimos el dominio de búsqueda
-
-    auto funcion = [](double x) {
-        return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.600 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5)); // Definición de la función
+    // Definir la función a evaluar
+    auto f = [](double x) {
+        return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
     };
 
-    // Solicitar al usuario la longitud del intervalo y la tolerancia de error
-    cout << "Método de Bisección para encontrar las raíces de la función.\n";
-    cout << "Ingrese la longitud del intervalo de búsqueda: ";
-    cin >> longitudIntervalo;
+    // Pedir al usuario el intervalo de búsqueda y el incremento
+    double start, end, increment;
+    
+    cout << "Ingresa el valor inicial del intervalo: ";
+    cin >> start;
+    
+    cout << "Ingresa el valor final del intervalo: ";
+    cin >> end;
 
-    cout << "Ingrese la tolerancia de error: ";
-    cin >> tolerancia;
+    cout << "Ingresa el incremento: ";
+    cin >> increment;
 
-    double a = dominioInicio;  // Comenzar desde el inicio del dominio
-    bool raizEncontrada = false;
+    // Llamar a la función para encontrar todas las raíces en el intervalo
+    vector<double> roots = findAllRoots(f, start, end, increment);
 
-    // Recorrer el dominio por intervalos de longitud especificada
-    while (a + longitudIntervalo <= dominioFin) {
-        double b = a + longitudIntervalo;
-
-        // Verificar si hay un cambio de signo en el intervalo [a, b]
-        if (evaluarFuncion(funcion, a) * evaluarFuncion(funcion, b) < 0) {
-            // Si hay un cambio de signo, aplicar el método de bisección
-            double raiz = biseccion(funcion, a, b, tolerancia);
-            cout << "Raíz encontrada en el intervalo [" << a << ", " << b << "]: " << raiz << endl;
-            raizEncontrada = true;
+    // Mostrar los resultados
+    cout << "Raíces encontradas:" << endl;
+    if (roots.empty()) {
+        cout << "No se encontraron raíces en el intervalo especificado." << endl;
+    } else {
+        for (size_t i = 0; i < roots.size(); ++i) {
+            cout << "Raíz " << i + 1 << " = " << roots[i] << endl;
         }
-
-        a = b;  // Avanzar al siguiente subintervalo
-    }
-
-    // Si no se encuentran raíces, informar al usuario
-    if (!raizEncontrada) {
-        cout << "No se encontraron raíces en el dominio dado." << endl;
     }
 
     return 0;
 }
+
