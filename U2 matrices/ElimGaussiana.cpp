@@ -6,6 +6,63 @@ using namespace std;
 
 const double EPSILON = 1e-6; // Tolerancia para la comprobación de resultados
 
+// Definir la matriz y el vector B
+const vector<vector<double>> matriz = {
+    //EJ1
+    /*
+    {3, -0.1,-0.2},
+    {0.1, 7,-0.3},
+    {0.3, -0.2, 10}
+    */
+    //EJ2
+    /*
+    {10, -3, 6},
+    {1, 8, -2},
+    {-2, 4, -9}
+    */
+    //EJ3
+    /*
+    {1, 7, -3},
+    {4, -4, 9},
+    {12, -1, 3}
+    */
+    //EJ4
+    /*
+    {-6, 0, 12},
+    {4, -1, -1},
+    {6, 8, 0}
+    */
+    //EJ5
+    /*
+    {5, 4, 0},
+    {4, -3, 7},
+    {0, 12, 2}
+    */
+};
+// Definir los vectores B correspondientes
+const vector<double> B = {
+    // EJ1
+    /*
+    7.85, 19.30, 71.40
+    */
+    // EJ2
+    /*
+    24.5, -9, -50
+    */
+    // EJ3
+    /*
+    -51, 61, 8
+    */
+    // EJ4
+    /*
+    60, -2, 44
+    */
+    // EJ5
+    /*
+    25, 3, 36
+    */
+};
+
 // Función para realizar la eliminación gaussiana
 void gaussianElimination(vector<vector<double>>& A, vector<double>& B) {
     int n = A.size();
@@ -78,19 +135,15 @@ bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, con
 }
 
 int main() {
-    // Definir el sistema de ecuaciones
-    vector<vector<double>> A = {
-        {5, 4,0},
-        {4, -3,7},
-        {0, 12,2}
-    };
-    vector<double> B = {25, 3, 36};
+    // Copiar la matriz y el vector B para no modificar los originales
+    vector<vector<double>> A = matriz;
+    vector<double> B_mod = B;
 
     // Realizar la eliminación gaussiana
-    gaussianElimination(A, B);
+    gaussianElimination(A, B_mod);
 
     // Realizar la sustitución hacia atrás
-    vector<double> X = backSubstitution(A, B);
+    vector<double> X = backSubstitution(A, B_mod);
 
     // Mostrar el resultado
     cout << "Resultado del sistema de ecuaciones:" << endl;
@@ -99,7 +152,7 @@ int main() {
     }
 
     // Comprobar la solución
-    if (checkSolution(A, B, X)) {
+    if (checkSolution(matriz, B, X)) {
         cout << "La solución es correcta." << endl;
     } else {
         cout << "La solución no es correcta." << endl;

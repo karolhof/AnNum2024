@@ -8,6 +8,22 @@ using namespace std;
 
 const double EPSILON = 1.0e-3;
 
+// Matriz de 2x2
+const vector<vector<double>> matriz = {
+    /*{0.835,0.667},
+    {0.333,0.266},*/
+    //EJ1
+    /*
+    {1, 2},
+    {1.10, 2},
+    */
+    //EJ2
+    /*
+    {1, 2, 6},
+    {1.05, 2},
+    */
+};
+
 // Función que calcula la norma de la matriz (Norma 1)
 double calcularNormaMatriz(const vector<vector<double>>& matriz) {
     int n = matriz.size();
@@ -78,12 +94,6 @@ int obtenerExponente(double numero) {
 }
 
 int main() {
-    // Matriz de 2x2
-    vector<vector<double>> matriz = {
-        {0.835, 0.667},
-        {0.333, 0.266}
-    };
-
     // Calcular la norma de la matriz
     double normaMatriz = calcularNormaMatriz(matriz);
     cout << "La norma de la matriz original es: " << normaMatriz << endl;
@@ -106,12 +116,12 @@ int main() {
     cout << "El exponente de la notación científica del producto es: " << exponente << endl;
 
     // Solicitar el valor de t
-    int t=obtenerExponente(EPSILON)+1;
-    cout<<"El valor de t es: "<<t<<endl;
+    int t = obtenerExponente(EPSILON)*-1 + 1;
+    cout << "El valor de t es: " << t << endl;
+
     // Calcular n = t - exponente
     int n = t - exponente;
     cout << "El valor de n es: " << n << endl;
 
     return 0;
 }
-

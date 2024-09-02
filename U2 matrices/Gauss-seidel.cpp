@@ -6,6 +6,62 @@ using namespace std;
 
 const double EPSILON = 1e-3; // Tolerancia para el criterio de parada
 
+/// Definir la matriz y el vector B
+const vector<vector<double>> matriz = {
+    //EJ1
+    /*
+    {3, -0.1,-0.2},
+    {0.1, 7,-0.3},
+    {0.3, -0.2, 10}
+    */
+    //EJ2
+    /*
+    {10, -3, 6},
+    {1, 8, -2},
+    {-2, 4, -9}
+    */
+    //EJ3
+    /*
+    {1, 7, -3},
+    {4, -4, 9},
+    {12, -1, 3}
+    */
+    //EJ4
+    /*
+    {-6, 0, 12},
+    {4, -1, -1},
+    {6, 8, 0}
+    */
+    //EJ5
+    /*
+    {5, 4, 0},
+    {0, 12, 2},
+    {4, -3, 7},
+    */
+};
+// Definir los vectores B correspondientes
+const vector<double> B = {
+    // EJ1
+    /*
+    7.85, 19.30, 71.40
+    */
+    // EJ2
+    /*
+    24.5, -9, -50
+    */
+    // EJ3
+    /*
+    -51, 61, 8
+    */
+    // EJ4
+    /*
+    60, -2, 44
+    */
+    // EJ5
+    /*
+    25,36, 3
+    */
+};
 bool isDiagonallyDominantRelative(const vector<vector<double>>& A, double threshold = 1.0) {
     int n = A.size();
 
@@ -149,15 +205,9 @@ bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, con
 }
 
 int main() {
-    // Matriz de coeficientes A
-    vector<vector<double>> A = {
-        {1, 7, -3},
-        {4, -4, 9},
-        {12, -1, 3},
-    };
-
-    // Vector de términos independientes B
-    vector<double> B = {-51, 61, 8};
+    // Copiar la matriz y el vector B para no modificar los originales
+    vector<vector<double>> A = matriz;
+    vector<double> B_mod = B;
 
     // Número máximo de iteraciones
     int maxIter = 25;
@@ -168,7 +218,7 @@ int main() {
         cout << "Haciendo la matriz diagonalmente dominante..." << endl;
 
         try {
-            makeMatrixDiagonallyDominant(A, B);
+            makeMatrixDiagonallyDominant(A, B_mod);
         } catch (const runtime_error& e) {
             cout << "Error: " << e.what() << endl;
             return 1;
@@ -178,7 +228,7 @@ int main() {
     }
 
     // Llamada a la función de Gauss-Seidel
-    vector<double> X = gaussSeidel(A, B, maxIter);
+    vector<double> X = gaussSeidel(A, B_mod, maxIter);
 
     // Mostrar el resultado final
     cout << "Resultado final del sistema de ecuaciones:" << endl;
@@ -187,7 +237,7 @@ int main() {
     }
 
     // Verificar la solución
-    if (checkSolution(A, B, X)) {
+    if (checkSolution(matriz, B, X)) {
         cout << "La solución es correcta." << endl;
     } else {
         cout << "La solución no es correcta." << endl;
