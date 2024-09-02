@@ -15,7 +15,7 @@ double funcion(double x) {
 
 // Definir la derivada de la función
 double derivada(double x) {
-    return 79.350 - 176.18 * x + 124.8 * pow(x, 2) - 34.4 * pow(x, 3) + 3.29 * pow(x, 4);
+    return 79.350 - 176.18 * x + 124.8 * pow(x, 2) - 34.72 * pow(x, 3) + 3.29 * pow(x, 4);
 }
 
 // Función para encontrar un intervalo donde ocurre un cambio de signo

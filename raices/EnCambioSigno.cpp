@@ -2,21 +2,26 @@
 #include <functional>
 #include <cmath>
 #include <limits>
+#include <vector>
 
 using namespace std;
 
-// Función para encontrar el intervalo donde f(x) cambia de signo
-pair<double, double> findSignChangeInterval(function<double(double)> f, double start, double increment, int maxSteps) {
+// Función para encontrar todos los intervalos donde f(x) cambia de signo
+vector<pair<double, double>> findSignChangeIntervals(function<double(double)> f, double start, double end, double increment) {
+    vector<pair<double, double>> intervals;
     double x1 = start;
     double f1 = f(x1);
-    
-    for (int i = 0; i < maxSteps; ++i) {
+
+    while (x1 < end) {
         double x2 = x1 + increment;
+        if (x2 > end) {
+            x2 = end;
+        }
         double f2 = f(x2);
 
         if (f1 * f2 < 0) {
             // Se encontró un cambio de signo
-            return {x1, x2};
+            intervals.push_back({x1, x2});
         }
 
         // Actualizar para la siguiente iteración
@@ -24,36 +29,37 @@ pair<double, double> findSignChangeInterval(function<double(double)> f, double s
         f1 = f2;
     }
 
-    // Si no se encuentra un cambio de signo
-    return {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()};
+    return intervals;
 }
 
 int main() {
-    // Definir la función a evaluar, por ejemplo f(x) = x^2 - 4
+    // Definir la función a evaluar, por ejemplo f(x) = exp(-x) - x
     auto f = [](double x) {
-        return exp(-x) - x;
+        return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
     };
 
-    // Pedir al usuario el valor inicial y el incremento
-    double start, increment;
-    int maxSteps;
+    // Pedir al usuario los valores inicial, final e incremento
+    double start, end, increment;
     
     cout << "Ingresa el valor inicial: ";
     cin >> start;
     
+    cout << "Ingresa el valor final: ";
+    cin >> end;
+    
     cout << "Ingresa el incremento: ";
     cin >> increment;
 
-    cout << "Ingresa el número máximo de pasos: ";
-    cin >> maxSteps;
+    // Llamar a la función para encontrar los intervalos donde cambia el signo
+    vector<pair<double, double>> intervals = findSignChangeIntervals(f, start, end, increment);
 
-    // Llamar a la función para encontrar el intervalo donde cambia el signo
-    pair<double, double> interval = findSignChangeInterval(f, start, increment, maxSteps);
-
-    if (isnan(interval.first)) {
-        cout << "No se encontró un cambio de signo en el intervalo especificado." << endl;
+    if (intervals.empty()) {
+        cout << "No se encontraron cambios de signo en el intervalo especificado." << endl;
     } else {
-        cout << "El cambio de signo ocurre entre " << interval.first << " y " << interval.second << "." << endl;
+        cout << "Se encontraron cambios de signo en los siguientes intervalos:" << endl;
+        for (const auto& interval : intervals) {
+            cout << "Entre " << interval.first << " y " << interval.second << "." << endl;
+        }
     }
 
     return 0;
