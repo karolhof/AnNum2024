@@ -10,6 +10,36 @@ const double EPSILON = 1.0e-3; // Tolerancia para el criterio de parada
 const int MAX_ITER = 100; // Número máximo de iteraciones para validación
 const double ERROR_THRESHOLD = 1.0e-6; // Umbral para la validación de convergencia
 
+// Definición de la función g(x) adecuada para el método de punto fijo
+double g(double x) {
+
+    //NO SIRVE NINGUNA ESTE METODO ES UNA MIERDA
+    //EJ1
+    // return exp(-x);
+    //EJ2
+    // return (1.750*x + 2.627) / 0.874;
+    //EJ3
+    // return pow((-23.330 + 79.350*x - 88.09*pow(x, 2) + 41.6*pow(x, 3) - 8.68*pow(x, 4)) / 0.658, 1.0/5.0);
+    //EJ4
+    // return exp(5);
+    //EJ5
+    // return 1 / (x - 0.6);
+}
+
+// Definir la función de la cual queremos encontrar la raíz
+double f(double x) {
+    //EJ1
+    // return exp(-x) - x;
+    //EJ2
+    // return -0.874*pow(x,2)+1.750*x+2.627;
+    //EJ3
+    // return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
+    //EJ4
+    // return log(x) - 5;
+    //EJ5
+    // return (1-0.6*x)/x;
+}
+
 // Función para encontrar intervalos con cambio de signo
 pair<double, double> findSignChangeInterval(function<double(double)> f, double start, double end, double increment) {
     double x1 = start;
@@ -100,12 +130,6 @@ bool punto_fijo_recursivo(function<double(double)> g, double Xi, double tol, int
 
 int main() {
     cout << "Método de Punto Fijo\n";
-    
-    // Definir una función g(x) adecuada para el método de punto fijo
-    function<double(double)> g;
-    g = [](double x) { 
-        return 0.5 * (23.330 + 88.09 * pow(x, 2) - 79.350 * x - 41.6 * pow(x, 3) + 8.68 * pow(x, 4)) / 0.658;
-    };
 
     double start, end, increment;
     cout << "Introduce el valor inicial del dominio: ";
@@ -116,7 +140,7 @@ int main() {
     cin >> increment;
 
     // Encontrar intervalos con cambio de signo
-    pair<double, double> interval = findSignChangeInterval(g, start, end, increment);
+    pair<double, double> interval = findSignChangeInterval(f, start, end, increment);
 
     if (isnan(interval.first)) {
         cout << "No se encontró un cambio de signo en el intervalo especificado." << endl;

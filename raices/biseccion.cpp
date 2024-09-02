@@ -6,7 +6,21 @@
 
 using namespace std;
 
-const double EPSILON = 0.001; // Tolerancia para el método de bisección
+const double EPSILON = 1.0e-3;  // Tolerancia para el método de bisección
+
+// Definición de la función a evaluar
+double f(double x) {
+    //EJ1
+    // return exp(-x) - x;
+    //EJ2
+    // return -0.874*pow(x,2)+1.750*x+2.627;
+    //EJ3
+    // return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
+    //EJ4
+    // return log(x) - 5;
+    //EJ5
+    // return (1-0.6*x)/x;
+}
 
 // Función para encontrar los intervalos donde f(x) cambia de signo
 vector<pair<double, double>> findSignChangeIntervals(function<double(double)> f, double start, double end, double increment) {
@@ -91,11 +105,6 @@ vector<double> findAllRoots(function<double(double)> f, double start, double end
 }
 
 int main() {
-    // Definir la función a evaluar
-    auto f = [](double x) {
-        return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
-    };
-
     // Pedir al usuario el intervalo de búsqueda y el incremento
     double start, end, increment;
     
@@ -123,4 +132,3 @@ int main() {
 
     return 0;
 }
-

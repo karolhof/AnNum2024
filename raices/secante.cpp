@@ -10,7 +10,16 @@ const double EPSILON = 1.0e-3; // Tolerancia para el criterio de parada
 
 // Definir la función de la cual queremos encontrar la raíz
 double funcion(double x) {
-    return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
+    //EJ1
+    // return exp(-x) - x;
+    //EJ2
+    // return -0.874*pow(x,2)+1.750*x+2.627;
+    //EJ3
+    // return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
+    //EJ4
+    // return log(x) - 5;
+    //EJ5
+    // return (1-0.6*x)/x;
 }
 
 // Función para encontrar un intervalo donde ocurre un cambio de signo
