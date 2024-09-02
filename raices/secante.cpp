@@ -1,14 +1,39 @@
 #include <iostream>
 #include <cmath>
-#include <iomanip> // Para controlar la precisión de la salida
+#include <iomanip>
+#include <limits>
+#include <functional>
 
 using namespace std; // Usar el espacio de nombres estándar
 
-const double EPSILON = 1.0e-4; // Tolerancia para el criterio de parada
+const double EPSILON = 1.0e-3; // Tolerancia para el criterio de parada
 
 // Definir la función de la cual queremos encontrar la raíz
 double funcion(double x) {
     return (-23.330) + (79.350 * x) - (88.09 * pow(x, 2)) + (41.6 * pow(x, 3)) - (8.68 * pow(x, 4)) + (0.658 * pow(x, 5));
+}
+
+// Función para encontrar un intervalo donde ocurre un cambio de signo
+pair<double, double> findSignChangeInterval(function<double(double)> f, double start, double end, double increment) {
+    double x1 = start;
+    double f1 = f(x1);
+    
+    while (x1 <= end) {
+        double x2 = x1 + increment;
+        double f2 = f(x2);
+
+        if (f1 * f2 < 0) {
+            // Se encontró un cambio de signo
+            return {x1, x2};
+        }
+
+        // Actualizar para la siguiente iteración
+        x1 = x2;
+        f1 = f2;
+    }
+
+    // Si no se encuentra un cambio de signo
+    return {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()};
 }
 
 // Implementación del método de la secante con tabla de iteraciones
@@ -45,7 +70,6 @@ double metodoSecante(double x0, double x1, double tolerancia, int maxIter) {
         cout << setw(5) << iter 
              << setw(10) << x1 
              << setw(10) << fx1;
-        
         if (iter == 0) {
             cout << setw(10) << "-" << endl; // En la primera iteración, no hay error previo
         } else {
@@ -59,7 +83,7 @@ double metodoSecante(double x0, double x1, double tolerancia, int maxIter) {
     }
 
     // Imprimir la raíz encontrada en la última fila
-    cout << string(40, '-') << endl;
+
     cout << setw(5) << iter 
          << setw(10) << x2 
          << setw(10) << funcion(x2) 
@@ -70,13 +94,38 @@ double metodoSecante(double x0, double x1, double tolerancia, int maxIter) {
 }
 
 int main() {
-    double x0 = 0.4; // Primer valor inicial
-    double x1 = 0.8; // Segundo valor inicial
-    int maxIter = 100; // Número máximo de iteraciones
+    double start, end, increment;
     
-    double raiz = metodoSecante(x0, x1, EPSILON, maxIter);
-    cout << "Aproximación de la raíz: " << raiz << endl;
-    
+    cout << "Ingresa el valor inicial del dominio: ";
+    cin >> start;
+    cout << "Ingresa el valor final del dominio: ";
+    cin >> end;
+    cout << "Ingresa el incremento para buscar el cambio de signo: ";
+    cin >> increment;
+
+    while (start < end) {
+        // Buscar un intervalo con cambio de signo
+        auto intervalo = findSignChangeInterval(funcion, start, end, increment);
+        
+        if (isnan(intervalo.first) || isnan(intervalo.second)) {
+            cerr << "No se encontraron más raíces en el intervalo especificado." << endl;
+            break;
+        }
+
+        double x0 = intervalo.first;
+        double x1 = intervalo.second;
+        int maxIter = 100; // Número máximo de iteraciones
+        
+        // Encontrar la raíz usando el método de la secante
+        double raiz = metodoSecante(x0, x1, EPSILON, maxIter);
+        cout << "Aproximación de la raíz: " << raiz << endl;
+        
+        // Pausa antes de buscar la siguiente raíz
+        system("pause");
+        cout<<endl;
+        // Actualizar el valor de start para buscar la siguiente raíz
+        start = x1 + increment;
+    }
+
     return 0;
 }
-

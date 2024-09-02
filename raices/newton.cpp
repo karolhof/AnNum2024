@@ -1,20 +1,12 @@
 #include <iostream>
 #include <cmath>
-#include <iomanip> // Para controlar la precisión de la salida
+#include <iomanip>
+#include <limits>
+#include <functional>
 
 using namespace std; // Usar el espacio de nombres estándar
-double newtonRaphson(double x0, double tolerancia, int maxIter);
 
-int main() {
-    double x0 = 3; // Valor inicial similar al ejemplo de la tabla
-    double tolerancia = 0.001; // Tolerancia para la convergencia
-    int maxIter = 100; // Número máximo de iteraciones
-    
-    double raiz = newtonRaphson(x0, tolerancia, maxIter);
-    cout << "Aproximación de la raíz: " << raiz << endl;
-    
-    return 0;
-}
+const double EPSILON = 1.0e-3; // Tolerancia para el criterio de parada
 
 // Definir la función de la cual queremos encontrar la raíz
 double funcion(double x) {
@@ -25,6 +17,30 @@ double funcion(double x) {
 double derivada(double x) {
     return 79.350 - 176.18 * x + 124.8 * pow(x, 2) - 34.4 * pow(x, 3) + 3.29 * pow(x, 4);
 }
+
+// Función para encontrar un intervalo donde ocurre un cambio de signo
+pair<double, double> findSignChangeInterval(function<double(double)> f, double start, double end, double increment) {
+    double x1 = start;
+    double f1 = f(x1);
+    
+    while (x1 <= end) {
+        double x2 = x1 + increment;
+        double f2 = f(x2);
+
+        if (f1 * f2 < 0) {
+            // Se encontró un cambio de signo
+            return {x1, x2};
+        }
+
+        // Actualizar para la siguiente iteración
+        x1 = x2;
+        f1 = f2;
+    }
+
+    // Si no se encuentra un cambio de signo
+    return {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()};
+}
+
 // Implementación del método de Newton-Raphson con tabla de iteraciones
 double newtonRaphson(double x0, double tolerancia, int maxIter) {
     double x = x0;
@@ -79,4 +95,40 @@ double newtonRaphson(double x0, double tolerancia, int maxIter) {
     }
     
     return x;
+}
+
+int main() {
+    double start, end, increment;
+    
+    cout << "Ingresa el valor inicial del dominio: ";
+    cin >> start;
+    cout << "Ingresa el valor final del dominio: ";
+    cin >> end;
+    cout << "Ingresa el incremento para buscar el cambio de signo: ";
+    cin >> increment;
+
+    while (start < end) {
+        // Buscar un intervalo con cambio de signo
+        auto intervalo = findSignChangeInterval(funcion, start, end, increment);
+        
+        if (isnan(intervalo.first) || isnan(intervalo.second)) {
+            cerr << "No se encontraron más raíces en el intervalo especificado." << endl;
+            break;
+        }
+
+        double x0 = intervalo.first;
+        int maxIter = 100; // Número máximo de iteraciones
+        
+        // Encontrar la raíz usando el método de Newton-Raphson
+        double raiz = newtonRaphson(x0, EPSILON, maxIter);
+        cout << "Aproximación de la raíz: " << raiz << endl;
+        
+        // Pausa antes de buscar la siguiente raíz
+        system("pause");
+        
+        // Actualizar el valor de start para buscar la siguiente raíz
+        start = intervalo.second + increment;
+    }
+
+    return 0;
 }
