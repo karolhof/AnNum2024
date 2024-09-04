@@ -14,11 +14,61 @@ const vector<vector<double>> matriz = {
     {3, 15, 1, 0},
     {1, 2, 20, 4},
     {5, 4, 3, 25}
+    //EJ1
+    /*
+    {3, -0.1,-0.2},
+    {0.1, 7,-0.3},
+    {0.3, -0.2, 10}
+    */
+    //EJ2
+    /*
+    {10, -3, 6},
+    {1, 8, -2},
+    {-2, 4, -9}
+    */
+    //EJ3
+    /*
+    {1, 7, -3},
+    {4, -4, 9},
+    {12, -1, 3}
+    */
+    //EJ4
+    /*
+    {-6, 0, 12},
+    {4, -1, -1},
+    {6, 8, 0}
+    */
+    //EJ5
+    /*
+    {5, 4, 0},
+    {4, -3, 7},
+    {0, 12, 2}
+    */
 };
 
 // Definir el vector B correspondiente
 const vector<double> B = {
     1, 2, 3, 4
+    // EJ1
+    /*
+    7.85, 19.30, 71.40
+    */
+    // EJ2
+    /*
+    24.5, -9, -50
+    */
+    // EJ3
+    /*
+    -51, 61, 8
+    */
+    // EJ4
+    /*
+    60, -2, 44
+    */
+    // EJ5
+    /*
+    25, 3, 36
+    */
 };
 
 // Función para realizar la factorización LU con permutación de filas
@@ -45,13 +95,20 @@ bool luDecomposition(vector<vector<double>>& A, vector<vector<double>>& L, vecto
             }
         }
 
+        // Si el pivote original es 0, se necesita una permutación
+        if (fabs(U[k][k]) < EPSILON) {
+            cout << "Hay un 0 en la diagonal principal." << endl;
+        }
+
         // Permutar filas en U, L y el vector de permutación
         if (maxRow != k) {
+            cout << "Permutando filas..." << endl;
             swap(U[k], U[maxRow]);
             swap(perm[k], perm[maxRow]);
             if (k > 0) {
                 swap(L[k], L[maxRow]);
             }
+            cout << "Las filas han sido permutadas exitosamente." << endl;
         }
 
         // Verificar si el elemento pivote es cero (para detectar singularidad)
@@ -161,3 +218,4 @@ int main() {
 
     return 0;
 }
+
