@@ -8,6 +8,10 @@ const double EPSILON = 1e-6; // Tolerancia para la comprobación de resultados
 
 // Definir la matriz y el vector B
 const vector<vector<double>> matriz = {
+    {0,1,3,4},
+    {3,6,2,7},
+    {1,2,0,4},
+    {5,4,3,2}
     //EJ1
     /*
     {3, -0.1,-0.2},
@@ -41,6 +45,7 @@ const vector<vector<double>> matriz = {
 };
 // Definir los vectores B correspondientes
 const vector<double> B = {
+    1,2,3,4
     // EJ1
     /*
     7.85, 19.30, 71.40
@@ -69,23 +74,32 @@ void gaussianElimination(vector<vector<double>>& A, vector<double>& B) {
 
     // Triangulación de la matriz A
     for (int i = 0; i < n; ++i) {
-        // Buscar el máximo elemento en la columna i para la pivote
-        double maxEl = fabs(A[i][i]);
-        int maxRow = i;
-        for (int k = i + 1; k < n; ++k) {
-            if (fabs(A[k][i]) > maxEl) {
-                maxEl = fabs(A[k][i]);
-                maxRow = k;
+        // Verificar si el elemento en la diagonal es 0
+        if (fabs(A[i][i]) < EPSILON) {
+            cout << "Hay un 0 en la diagonal principal." << endl;
+            
+            // Buscar una fila debajo que tenga un elemento no cero en la columna i
+            int maxRow = i;
+            for (int k = i + 1; k < n; ++k) {
+                if (fabs(A[k][i]) > EPSILON) {
+                    maxRow = k;
+                    break;
+                }
+            }
+
+            // Si encontramos una fila con un elemento no cero, la intercambiamos
+            if (maxRow != i) {
+                cout << "Permutando filas..." << endl;
+                swap(A[i], A[maxRow]);
+                swap(B[i], B[maxRow]);
+                cout << "Las filas han sido permutadas exitosamente." << endl;
+            } else {
+                cout << "No se puede encontrar una solución única: cero en la diagonal y no hay filas para permutar." << endl;
+                return;
             }
         }
 
-        // Intercambiar la fila actual con la fila de pivote
-        if (i != maxRow) {
-            swap(A[i], A[maxRow]);
-            swap(B[i], B[maxRow]);
-        }
-
-        // Hacer cero todos los elementos debajo del pivote
+        // Continuar con la eliminación gaussiana como de costumbre
         for (int k = i + 1; k < n; ++k) {
             double factor = A[k][i] / A[i][i];
             for (int j = i; j < n; ++j) {

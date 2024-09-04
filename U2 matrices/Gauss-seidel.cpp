@@ -8,6 +8,13 @@ const double EPSILON = 1e-3; // Tolerancia para el criterio de parada
 
 /// Definir la matriz y el vector B
 const vector<vector<double>> matriz = {
+    //Prueba 4x4
+    
+    {10,1,2,1},
+    {3,15,1,0},
+    {5,4,3,25},
+    {1,2,20,4}
+    
     //EJ1
     /*
     {3, -0.1,-0.2},
@@ -41,6 +48,9 @@ const vector<vector<double>> matriz = {
 };
 // Definir los vectores B correspondientes
 const vector<double> B = {
+    //Prueba 4x4
+    
+    1,2,4,3
     // EJ1
     /*
     7.85, 19.30, 71.40
