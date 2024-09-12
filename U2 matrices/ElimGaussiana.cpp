@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <iomanip> // Para setw
 
 using namespace std;
 
@@ -8,10 +9,13 @@ const double EPSILON = 1e-6; // Tolerancia para la comprobación de resultados
 
 // Definir la matriz y el vector B
 const vector<vector<double>> matriz = {
-    {0,1,3,4},
-    {3,6,2,7},
-    {1,2,0,4},
-    {5,4,3,2}
+    //Prueba 4x4
+    
+    {10,1,2,1},
+    {3,15,1,0},
+    {5,4,3,25},
+    {1,2,20,4}
+    
     //EJ1
     /*
     {3, -0.1,-0.2},
@@ -39,13 +43,13 @@ const vector<vector<double>> matriz = {
     //EJ5
     /*
     {5, 4, 0},
+    {0, 12, 2},
     {4, -3, 7},
-    {0, 12, 2}
     */
 };
-// Definir los vectores B correspondientes
 const vector<double> B = {
-    1,2,3,4
+    //Prueba 4x4
+    1,2,4,3
     // EJ1
     /*
     7.85, 19.30, 71.40
@@ -64,13 +68,28 @@ const vector<double> B = {
     */
     // EJ5
     /*
-    25, 3, 36
+    25,36, 3
     */
-};
+   };
+
+// Función para imprimir una matriz y su correspondiente vector B
+void printMatrix(const vector<vector<double>>& A, const vector<double>& B_mod) {
+    int n = A.size();
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cout << setw(10) << A[i][j] << " "; // Establecer ancho de 10 caracteres para cada elemento
+        }
+        cout << "| " << setw(10) << B_mod[i] << endl; // También para el vector B
+    }
+    cout << endl;
+}
 
 // Función para realizar la eliminación gaussiana
-void gaussianElimination(vector<vector<double>>& A, vector<double>& B) {
+void gaussianElimination(vector<vector<double>>& A, vector<double>& B_mod) {
     int n = A.size();
+
+    cout << "Inicio de la eliminación gaussiana:" << endl;
+    printMatrix(A, B_mod);
 
     // Triangulación de la matriz A
     for (int i = 0; i < n; ++i) {
@@ -91,36 +110,47 @@ void gaussianElimination(vector<vector<double>>& A, vector<double>& B) {
             if (maxRow != i) {
                 cout << "Permutando filas..." << endl;
                 swap(A[i], A[maxRow]);
-                swap(B[i], B[maxRow]);
+                swap(B_mod[i], B_mod[maxRow]);
                 cout << "Las filas han sido permutadas exitosamente." << endl;
             } else {
-                cout << "No se puede encontrar una solución única: cero en la diagonal y no hay filas para permutar." << endl;
+                cout << "No se puede encontrar una solución única." << endl;
                 return;
             }
         }
 
-        // Continuar con la eliminación gaussiana como de costumbre
+        // Continuar con la eliminación gaussiana
         for (int k = i + 1; k < n; ++k) {
             double factor = A[k][i] / A[i][i];
             for (int j = i; j < n; ++j) {
                 A[k][j] -= factor * A[i][j];
             }
-            B[k] -= factor * B[i];
+            B_mod[k] -= factor * B_mod[i];
         }
+
+        // Imprimir la matriz en cada paso de la triangulación
+        cout << "Paso " << i + 1 << " de triangulación:" << endl;
+        printMatrix(A, B_mod);
     }
 }
 
 // Función para realizar la sustitución hacia atrás
-vector<double> backSubstitution(const vector<vector<double>>& A, const vector<double>& B) {
+vector<double> backSubstitution(const vector<vector<double>>& A, const vector<double>& B_mod) {
     int n = A.size();
     vector<double> X(n);
 
+    cout << "Inicio de la sustitución hacia atrás:" << endl;
+
     for (int i = n - 1; i >= 0; --i) {
-        X[i] = B[i];
+        X[i] = B_mod[i];
+        cout << "X" << i + 1 << " = " << B_mod[i];
+        
+        // Mostrar las operaciones para cada valor de X[i]
         for (int j = i + 1; j < n; ++j) {
+            cout << " - (" << A[i][j] << " * X" << j + 1 << " = " << A[i][j] * X[j] << ")";
             X[i] -= A[i][j] * X[j];
         }
         X[i] /= A[i][i];
+        cout << " / " << A[i][i] << " = " << X[i] << endl; // Imprimir resultado final de X[i]
     }
 
     return X;
@@ -131,11 +161,14 @@ bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, con
     int n = A.size();
     vector<double> AX(n, 0.0);
 
+    cout << "Verificación de la solución:" << endl;
+
     // Calcular A * X
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             AX[i] += A[i][j] * X[j];
         }
+        cout << "A * X[" << i + 1 << "] = " << AX[i] << ", B[" << i + 1 << "] = " << B[i] << endl;
     }
 
     // Comparar A * X con B
@@ -159,8 +192,8 @@ int main() {
     // Realizar la sustitución hacia atrás
     vector<double> X = backSubstitution(A, B_mod);
 
-    // Mostrar el resultado
-    cout << "Resultado del sistema de ecuaciones:" << endl;
+    // Mostrar el resultado final
+    cout << "Resultado final del sistema de ecuaciones:" << endl;
     for (size_t i = 0; i < X.size(); ++i) {
         cout << "X" << i + 1 << " = " << X[i] << endl;
     }

@@ -71,6 +71,16 @@ const vector<double> B = {
     */
 };
 
+// Función para mostrar una matriz
+void printMatrix(const vector<vector<double>>& mat) {
+    for (const auto& row : mat) {
+        for (double val : row) {
+            cout << setw(10) << val << " ";
+        }
+        cout << endl;
+    }
+}
+
 // Función para realizar la factorización LU con permutación de filas
 bool luDecomposition(vector<vector<double>>& A, vector<vector<double>>& L, vector<vector<double>>& U, vector<int>& perm) {
     int n = A.size();
@@ -95,20 +105,20 @@ bool luDecomposition(vector<vector<double>>& A, vector<vector<double>>& L, vecto
             }
         }
 
-        // Si el pivote original es 0, se necesita una permutación
-        if (fabs(U[k][k]) < EPSILON) {
-            cout << "Hay un 0 en la diagonal principal." << endl;
-        }
-
         // Permutar filas en U, L y el vector de permutación
         if (maxRow != k) {
-            cout << "Permutando filas..." << endl;
+            cout << "Permutando filas " << k + 1 << " y " << maxRow + 1 << "..." << endl;
             swap(U[k], U[maxRow]);
             swap(perm[k], perm[maxRow]);
             if (k > 0) {
                 swap(L[k], L[maxRow]);
             }
-            cout << "Las filas han sido permutadas exitosamente." << endl;
+            cout << "Matriz U después de permutar filas:" << endl;
+            printMatrix(U);
+            cout << "----------------------------------------" << endl;
+            cout << "Matriz L después de permutar filas:" << endl;
+            printMatrix(L);
+            cout << "----------------------------------------" << endl;
         }
 
         // Verificar si el elemento pivote es cero (para detectar singularidad)
@@ -125,6 +135,14 @@ bool luDecomposition(vector<vector<double>>& A, vector<vector<double>>& L, vecto
                 U[i][j] -= factor * U[k][j];
             }
         }
+
+        // Mostrar los pasos de la eliminación
+        cout << "Matriz U después de eliminar fila " << k + 1 << ":" << endl;
+        printMatrix(U);
+        cout << "----------------------------------------" << endl;
+        cout << "Matriz L después de eliminar fila " << k + 1 << ":" << endl;
+        printMatrix(L);
+        cout << "----------------------------------------" << endl;
     }
     return true;
 }
@@ -139,6 +157,11 @@ vector<double> forwardSubstitution(const vector<vector<double>>& L, const vector
         for (int j = 0; j < i; ++j) {
             y[i] -= L[i][j] * y[j];
         }
+    }
+
+    cout << "Vector y después de sustitución hacia adelante:" << endl;
+    for (size_t i = 0; i < y.size(); ++i) {
+        cout << "y" << i + 1 << " = " << y[i] << endl;
     }
 
     return y;
@@ -157,6 +180,11 @@ vector<double> backSubstitution(const vector<vector<double>>& U, const vector<do
         x[i] /= U[i][i];
     }
 
+    cout << "Vector x después de sustitución hacia atrás:" << endl;
+    for (size_t i = 0; i < x.size(); ++i) {
+        cout << "x" << i + 1 << " = " << x[i] << endl;
+    }
+
     return x;
 }
 
@@ -173,7 +201,9 @@ bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, con
     }
 
     // Comparar A * X con B
+    cout << "Comparación de A * X con B:" << endl;
     for (int i = 0; i < n; ++i) {
+        cout << "A * X[" << i + 1 << "] = " << AX[i] << ", B[" << i + 1 << "] = " << B[i] << endl;
         if (fabs(AX[i] - B[i]) > EPSILON) {
             return false; // La solución no es correcta
         }
@@ -213,9 +243,8 @@ int main() {
     if (checkSolution(matriz, B, X)) {
         cout << "La solución es correcta." << endl;
     } else {
-        cout << "La solución no es correcta." << endl;
+        cout << "La solución es incorrecta." << endl;
     }
 
     return 0;
 }
-

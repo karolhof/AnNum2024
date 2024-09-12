@@ -1,55 +1,54 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <stdexcept>
 
 using namespace std;
 
 const double EPSILON = 1e-3; // Tolerancia para el criterio de parada
 
-/// Definir la matriz y el vector B
+// Definir la matriz y el vector B
 const vector<vector<double>> matriz = {
     //Prueba 4x4
-    
     {10,1,2,1},
     {3,15,1,0},
     {5,4,3,25},
     {1,2,20,4}
-    
-    //EJ1
+    // EJ1
     /*
     {3, -0.1,-0.2},
     {0.1, 7,-0.3},
     {0.3, -0.2, 10}
     */
-    //EJ2
+    // EJ2
     /*
     {10, -3, 6},
     {1, 8, -2},
     {-2, 4, -9}
     */
-    //EJ3
+    // EJ3
     /*
     {1, 7, -3},
     {4, -4, 9},
     {12, -1, 3}
     */
-    //EJ4
+    // EJ4
     /*
     {-6, 0, 12},
     {4, -1, -1},
     {6, 8, 0}
     */
-    //EJ5
+    // EJ5
     /*
     {5, 4, 0},
     {0, 12, 2},
     {4, -3, 7},
     */
 };
+
 // Definir los vectores B correspondientes
 const vector<double> B = {
     //Prueba 4x4
-    
     1,2,4,3
     // EJ1
     /*
@@ -72,6 +71,8 @@ const vector<double> B = {
     25,36, 3
     */
 };
+
+// Función para verificar la dominancia diagonal relativa
 bool isDiagonallyDominantRelative(const vector<vector<double>>& A, double threshold = 1.0) {
     int n = A.size();
 
@@ -95,14 +96,14 @@ bool isDiagonallyDominantRelative(const vector<vector<double>>& A, double thresh
     return true;
 }
 
-// Función para intercambiar filas en la matriz A y el vector b
-void swapRows(vector<vector<double>>& A, vector<double>& b, int row1, int row2) {
+// Función para intercambiar filas en la matriz A y el vector B
+void swapRows(vector<vector<double>>& A, vector<double>& B, int row1, int row2) {
     swap(A[row1], A[row2]);
-    swap(b[row1], b[row2]);
+    swap(B[row1], B[row2]);
 }
 
 // Función para asegurar que la matriz sea diagonalmente dominante
-void makeMatrixDiagonallyDominant(vector<vector<double>>& A, vector<double>& b) {
+void makeMatrixDiagonallyDominant(vector<vector<double>>& A, vector<double>& B) {
     int n = A.size();
 
     for (int i = 0; i < n; ++i) {
@@ -130,7 +131,7 @@ void makeMatrixDiagonallyDominant(vector<vector<double>>& A, vector<double>& b) 
 
                 if (diagonalElementK > sumOfOthersK) {
                     // Intercambiar la fila i con la fila k
-                    swapRows(A, b, i, k);
+                    swapRows(A, B, i, k);
                     found = true;
                     break;
                 }
@@ -192,16 +193,20 @@ vector<double> gaussSeidel(const vector<vector<double>>& A, const vector<double>
     return X;
 }
 
+
 // Función para comprobar la solución
 bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, const vector<double>& X) {
     int n = A.size();
     vector<double> AX(n, 0.0);
+
+    cout << "Verificación de la solución:" << endl;
 
     // Calcular A * X
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             AX[i] += A[i][j] * X[j];
         }
+        cout << "A * X[" << i + 1 << "] = " << AX[i] << ", B[" << i + 1 << "] = " << B[i] << endl;
     }
 
     // Comparar A * X con B
@@ -240,13 +245,7 @@ int main() {
     // Llamada a la función de Gauss-Seidel
     vector<double> X = gaussSeidel(A, B_mod, maxIter);
 
-    // Mostrar el resultado final
-    cout << "Resultado final del sistema de ecuaciones:" << endl;
-    for (size_t i = 0; i < X.size(); ++i) {
-        cout << "X" << i + 1 << " = " << X[i] << endl;
-    }
-
-    // Verificar la solución
+    // Comprobar la solución
     if (checkSolution(matriz, B, X)) {
         cout << "La solución es correcta." << endl;
     } else {
@@ -255,6 +254,3 @@ int main() {
 
     return 0;
 }
-
-
-
