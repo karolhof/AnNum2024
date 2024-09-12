@@ -10,14 +10,14 @@ const double EPSILON = 1e-3; // Tolerancia para el criterio de parada
 // Definir la matriz y el vector B
 const vector<vector<double>> matriz = {
     //Prueba 4x4
-    {10,1,2,1},
-    {3,15,1,0},
-    {5,4,3,25},
-    {1,2,20,4}
+    {10, 1, 2, 1},
+    {3, 15, 1, 0},
+    {5, 4, 3, 25},
+    {1, 2, 20, 4}
     // EJ1
     /*
-    {3, -0.1,-0.2},
-    {0.1, 7,-0.3},
+    {3, -0.1, -0.2},
+    {0.1, 7, -0.3},
     {0.3, -0.2, 10}
     */
     // EJ2
@@ -42,14 +42,14 @@ const vector<vector<double>> matriz = {
     /*
     {5, 4, 0},
     {0, 12, 2},
-    {4, -3, 7},
+    {4, -3, 7}
     */
 };
 
 // Definir los vectores B correspondientes
 const vector<double> B = {
     //Prueba 4x4
-    1,2,4,3
+    1, 2, 4, 3
     // EJ1
     /*
     7.85, 19.30, 71.40
@@ -68,9 +68,21 @@ const vector<double> B = {
     */
     // EJ5
     /*
-    25,36, 3
+    25, 36, 3
     */
 };
+
+// Función para mostrar una matriz
+void printMatrix(const vector<vector<double>>& A) {
+    cout << "Matriz A:" << endl;
+    for (const auto& row : A) {
+        for (double val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
 
 // Función para verificar la dominancia diagonal relativa
 bool isDiagonallyDominantRelative(const vector<vector<double>>& A, double threshold = 1.0) {
@@ -193,7 +205,6 @@ vector<double> gaussSeidel(const vector<vector<double>>& A, const vector<double>
     return X;
 }
 
-
 // Función para comprobar la solución
 bool checkSolution(const vector<vector<double>>& A, const vector<double>& B, const vector<double>& X) {
     int n = A.size();
@@ -227,6 +238,9 @@ int main() {
     // Número máximo de iteraciones
     int maxIter = 25;
 
+    cout<<"Matriz original:"<<endl;
+    printMatrix(A);
+
     // Verificar si la matriz es diagonalmente dominante
     if (!isDiagonallyDominantRelative(A)) {
         cout << "La matriz no es diagonalmente dominante." << endl;
@@ -234,6 +248,8 @@ int main() {
 
         try {
             makeMatrixDiagonallyDominant(A, B_mod);
+            // Mostrar la matriz después de hacerla diagonalmente dominante
+            printMatrix(A);
         } catch (const runtime_error& e) {
             cout << "Error: " << e.what() << endl;
             return 1;
