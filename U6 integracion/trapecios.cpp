@@ -5,29 +5,24 @@
 
 using namespace std;
 
+// Constantes definidas en el encabezado para fácil acceso
+const double b = 5;                // Límite superior de integración
+const double a = -3;               // Límite inferior de integración
+const int tramos = 10;             // Número de tramos para la integración por trapecios
+
+// Puntos de muestra
+const vector<double> xi = {1.0, 1.5, 2.0, 2.5, 3.0};
+const vector<double> fi = {0.84147098, 1.22167687, 1.28594075, 0.94626755, 0.24442702};
+
 // Función fx (modificable)
 double fx(double x) {
     // return 8 + 5 * cos(x);    
-     return 1 - x - 4 * pow(x, 3) + 3 * pow(x, 5);
+    return 1 - x - 4 * pow(x, 3) + 3 * pow(x, 5);
     // return sin(5*x+1);
     // return x*exp(2*x);
 }
 
-// Muestras
-const vector <double> xi={
-
-    1.0, 1.5, 2.0, 2.5, 3.0
-
-};
-
-const vector <double> fi={
-
-    0.84147098, 1.22167687, 1.28594075, 0.94626755, 0.24442702
-
-};
-
-
-// Regla de Trapecio para una función fx con salida detallada
+// Regla de Trapecios para una función fx con salida detallada
 double reglaTrapecios(double a, double b, int tramos) {
     double h = (b - a) / tramos;
     double xi = a;
@@ -96,11 +91,6 @@ double reglaTrapeciosMuestras(const vector<double>& xi, const vector<double>& fi
 
 int main() {
     // Parte 1: Usando una función fx
-    double a = -3;
-    double b = 5;  // Usamos la constante M_PI para el valor de pi
-    int tramos = 10;
-
-    // SALIDA DETALLADA (tabla para fx)
     cout<<endl;
     cout << "--- Integración por Trapecios (Función F(X) ---" << endl;
     cout<<endl;

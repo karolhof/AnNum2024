@@ -6,13 +6,13 @@
 using namespace std;
 
 // Parámetros de la integral
+const double b = 4;            // Límite superior de integración
 const double a = 0;               // Límite inferior de integración
-const double b = M_PI;            // Límite superior de integración
-const int n = 10;                 // Número de subintervalos (par)
+const int n = 8;                 // Número de subintervalos (par)
 
 // Función que quieres integrar
 double funcion(double x) {
-    return sin(x);  // Puedes cambiarla por cualquier otra función
+    return x*exp(2*x);  // Puedes cambiarla por cualquier otra función
 }
 
 // Función que implementa el método de Simpson
