@@ -213,6 +213,11 @@ void mostrarTablaCrecimiento(const vector<double>& x, const vector<double>& y) {
          << setw(10) << fixed << setprecision(5) << sumXInvY << endl;
 }
 int main() {
+
+    cout<<string(60,'-')<<endl;
+    cout<<"Regresión no lineal"<<endl;
+    cout<<string(60,'-')<<endl;
+
     int opcion;
 
     do {

@@ -40,6 +40,11 @@ void regresionLineal() {
 }
 
 int main() {
+
+    cout<<string(60,'-')<<endl;
+    cout<<"Regresión lineal"<<endl;
+    cout<<string(60,'-')<<endl;
+
     regresionLineal();
     return 0;
 }

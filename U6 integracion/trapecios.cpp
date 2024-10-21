@@ -91,9 +91,9 @@ double reglaTrapeciosMuestras(const vector<double>& xi, const vector<double>& fi
 
 int main() {
     // Parte 1: Usando una función fx
-    cout<<endl;
-    cout << "--- Integración por Trapecios (Función F(X) ---" << endl;
-    cout<<endl;
+    cout<<string(60,'-')<<endl;
+    cout<<"Integración con trapecios [F(x)]"<<endl;
+    cout<<string(60,'-')<<endl;
     double area = reglaTrapecios(a, b, tramos);
 
     // SALIDA FINAL
@@ -101,9 +101,9 @@ int main() {
     cout << "Integral (fx): " << area << endl;
 
     // Parte 2: Usando muestras de xi y fi
-    cout<<endl;
-    cout << "\n--- Integración por Trapecios (Muestras) ---" << endl;
-    cout<<endl;
+    cout<<string(60,'-')<<endl;
+    cout<<"Integración con trapecios [muestras]"<<endl;
+    cout<<string(60,'-')<<endl;
     // Salida detallada (tabla para muestras)
     double area_muestras = reglaTrapeciosMuestras(xi, fi);
 

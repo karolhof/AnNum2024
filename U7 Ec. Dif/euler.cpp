@@ -42,6 +42,11 @@ void euler() {
 }
 
 int main() {
+
+    cout<<string(60,'-')<<endl;
+    cout<<"Método de Euler"<<endl;
+    cout<<string(60,'-')<<endl;
+
     euler(); // Ejecutar el método de Euler
     return 0;
 }

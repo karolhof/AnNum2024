@@ -118,6 +118,10 @@ void mostrarPolinomiosLi(const vector<double>& x) {
 
 int main() {
 
+    cout<<string(60,'-')<<endl;
+    cout<<"Polinomios de Lagrange"<<endl;
+    cout<<string(60,'-')<<endl;
+
     // Mostrar los polinomios L_i(x)
     mostrarPolinomiosLi(x);
 

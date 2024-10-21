@@ -58,6 +58,11 @@ void rungeKutta() {
 
 // Función principal
 int main() {
+
+    cout << string(60, '-') << endl;
+    cout << "Método de Runge-Kutta de segundo orden" << endl;
+    cout << string(60, '-') << endl;
+
     rungeKutta(); // Llamada al método Runge-Kutta de segundo orden
     return 0;
 }

@@ -103,6 +103,11 @@ void interpolacionNewton() {
 }
 
 int main() {
+
+    cout<<string(60,'-')<<endl;
+    cout<<"Interpolación de Newton"<<endl;
+    cout<<string(60,'-')<<endl;
+
     interpolacionNewton();
     return 0;
 }

@@ -62,6 +62,11 @@ void rungeKutta() {
 
 // Función principal
 int main() {
+
+    cout << string(60, '-') << endl;
+    cout << "Método de Runge-Kutta de tercer orden" << endl;
+    cout << string(60, '-') << endl;
+
     rungeKutta(); // Llamada al método Runge-Kutta de tercer orden
     return 0;
 }

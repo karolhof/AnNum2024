@@ -61,9 +61,10 @@ double simpson(double a, double b, int n, function<double(double)> f) {
 }
 
 int main() {
-    cout<<endl;
-    cout<<string(30,'-')<<"Método de Simpson"<<string(30,'-')<<endl;
-    cout<<endl;
+
+    cout<<string(60,'-')<<endl;
+    cout<<"Método de Simpson"<<endl;
+    cout<<string(60,'-')<<endl;
 
     // Llamada al método de Simpson y resultado
     double resultado = simpson(a, b, n, funcion);
