@@ -31,11 +31,11 @@ void heun() {
 
     // Ciclo para el método de Heun
     int i = 0;
-    while (x <= x_final) {
+    while (x < x_final) { // Mantener x < x_final
         // Mostrar la fila de la tabla
         if (i > 0) {
             cout << setw(5) << i << " | "
-                 << setw(15) << fixed << setprecision(5) << x - h << " | "
+                 << setw(15) << fixed << setprecision(5) << x << " | "
                  << setw(20) << fixed << setprecision(5) << y_predict << " | "
                  << setw(20) << fixed << setprecision(5) << y << " |" << endl;
         }
@@ -54,15 +54,25 @@ void heun() {
         i++;
     }
 
+    // Asegurarse de que se imprima x_final correctamente
+    cout << setw(5) << i << " | "
+         << setw(15) << fixed << setprecision(5) << x_final << " | "
+         << setw(20) << fixed << setprecision(5) << y_predict << " | "
+         << setw(20) << fixed << setprecision(5) << y << " |" << endl;
+
     // Mostrar el resultado final claramente
     cout << "\nResultado Final:\n";
-    cout << "Para x = " << fixed << setprecision(5) << x - h 
+    cout << "Para x = " << fixed << setprecision(5) << x_final 
          << ", y (Euler) = " << fixed << setprecision(5) << y_predict 
          << ", y (Heun) = " << fixed << setprecision(5) << y << endl;
 }
 
-
 int main() {
+
+    cout << string(60, '-') << endl;
+    cout << "Método de Hunn" << endl;
+    cout << string(60, '-') << endl;
+
     heun(); // Ejecutar el método de Heun
     return 0;
 }
