@@ -6,8 +6,8 @@
 using namespace std;
 
 // Puntos de ejemplo (X, Y)
-const vector<double> x = {0, 1, 2, 3};  // Valores de X
-const vector<double> y = {1, 2.7182, 7.3891, 20.0855};  // Valores de Y correspondientes
+const vector<double> x = {-1,0,1,2};  // Valores de X
+const vector<double> y = {2,-0.7183,0,0.8964};  // Valores de Y correspondientes
 
 // Función para calcular el polinomio básico de Lagrange L_i(x)
 double Li(int i, const vector<double>& x, double valorX) {
